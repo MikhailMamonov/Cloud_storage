@@ -2,11 +2,11 @@ import React, { FC } from 'react';
 import './navbar.scss';
 import logo from '../../assets/navbar-logo.svg';
 import { NavLink } from 'react-router-dom';
-import { RootState } from '../../store';
-import { useAppSelector } from '../../hooks/useSelector';
+import { logout } from '../../store/features/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/useSelector';
 const Navbar: FC = () => {
   const { isAuth } = useAppSelector((state) => state.auth);
-
+  const dispatch = useAppDispatch();
   return (
     <div className="navbar">
       <div className="container">
@@ -20,6 +20,11 @@ const Navbar: FC = () => {
         {!isAuth && (
           <div className="navbar__registration">
             <NavLink to={'/registration'}>Регистрация</NavLink>
+          </div>
+        )}
+        {isAuth && (
+          <div className="navbar__login" onClick={() => dispatch(logout())}>
+            Выход
           </div>
         )}
       </div>
