@@ -1,8 +1,9 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import config from 'config';
-import router from './routes';
-import corsMiddleware from './midlewares/cors.middleware';
+const express = require('express');
+const mongoose = require('mongoose');
+const config = require('config');
+const router = require('./routes');
+
+const corsMiddleware = require('./middlewares/cors.middleware');
 
 const app = express();
 const PORT = config.get('serverPort');

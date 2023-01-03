@@ -1,5 +1,4 @@
-import { Schema, model } from 'mongoose';
-
+const { Schema, model } = require('mongoose');
 const User = new Schema({
   email: { type: String, require: true, unique: true },
   password: { type: String, require: true },
@@ -9,4 +8,4 @@ const User = new Schema({
   files: [{ type: Schema.Types.ObjectId, ref: 'File' }],
 });
 
-export default model('User', User);
+module.exports = model('User', User);

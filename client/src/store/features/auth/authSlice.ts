@@ -5,10 +5,10 @@ import axios from '../../../api';
 import { AxiosError } from 'axios';
 interface AuthState {
   user: User | null;
-  token: string;
+  token: string | null;
   isAuth: boolean;
   isLoading: boolean;
-  status: string;
+  status: string | null;
   errors: Array<string>;
 }
 
@@ -80,14 +80,37 @@ export const login = createAsyncThunk<
     if (!error.response) {
       throw err;
     }
+    alert(err.response.data.message);
     return rejectWithValue(error.response.data);
+  }
+});
+
+export const auth = createAsyncThunk<LoginPayload>('auth/', async () => {
+  try {
+    const response = await axios.get(`auth`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+    debugger;
+    return response.data;
+  } catch (e: any) {
+    debugger;
+    alert(e.response.data.message);
   }
 });
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      state.isLoading = false;
+      state.status = null;
+      state.token = null;
+      state.user = null;
+      state.isAuth = false;
+      localStorage.removeItem('token');
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registration.fulfilled, (state, action) => {
@@ -119,8 +142,26 @@ const authSlice = createSlice({
         state.errors = action.payload!.errors;
         state.status = action.payload!.message;
         state.isLoading = false;
+      })
+      .addCase(auth.fulfilled, (state, action) => {
+        state.isLoading = false;
+        localStorage.setItem('token', action.payload.token);
+        state.isAuth = true;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.status = action.payload.message;
+      })
+      .addCase(auth.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(auth.rejected, (state, action) => {
+        localStorage.removeItem('token');
+        state.isAuth = false;
+        state.isLoading = false;
       });
   },
 });
+
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;
