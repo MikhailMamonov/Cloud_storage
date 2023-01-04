@@ -1,9 +1,10 @@
 import { FC, useState } from 'react';
 import Input from '../../utils/input/Input';
-import { LoginProps, login } from '../../store/features/auth/authSlice';
+import { login } from '../../store/features/auth/authSlice';
 import './authorization.scss';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store';
+import { LoginProps } from '../../store/features/auth/types';
 
 const Login: FC = () => {
   const [email, setEmail] = useState('');

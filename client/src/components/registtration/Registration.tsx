@@ -1,12 +1,10 @@
 import { FC, useState } from 'react';
 import Input from '../../utils/input/Input';
-import {
-  registration,
-  RegistrationProps,
-} from '../../store/features/auth/authSlice';
+import { registration } from '../../store/features/auth/authSlice';
 import './registration.scss';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store';
+import { RegistrationProps } from '../../store/features/auth/types';
 
 const Registration: FC = () => {
   const [email, setEmail] = useState('');
