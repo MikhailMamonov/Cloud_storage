@@ -3,14 +3,28 @@ import './file.scss';
 import dirLogo from '../../../../assets/dir.svg';
 import fileLogo from '../../../../assets/file.svg';
 import { IFile } from '../../../../store/features/files/types';
+import {
+  setCurrentDir,
+  pushToStack,
+} from '../../../../store/features/files/fileSlice';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/useSelector';
 
 interface FileProps {
   file: IFile;
 }
 
 const File: FC<FileProps> = ({ file }) => {
+  const dispatch = useAppDispatch();
+  const currentDir = useAppSelector((state) => state.file.currentDir);
+  function openDirHandler() {
+    dispatch(pushToStack(currentDir));
+    dispatch(setCurrentDir(file._id));
+  }
   return (
-    <div className="file">
+    <div
+      className="file"
+      onClick={file.type === 'dir' ? (e) => openDirHandler() : undefined}
+    >
       <img
         src={file.type === 'dir' ? dirLogo : fileLogo}
         alt=""

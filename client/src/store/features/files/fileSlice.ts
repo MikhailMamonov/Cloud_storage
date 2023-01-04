@@ -8,6 +8,7 @@ const initialState = {
   files: [],
   currentDir: null,
   popupDisplay: 'none',
+  dirStack: [],
 } as FileState;
 
 export const getFiles = createAsyncThunk<
@@ -74,6 +75,16 @@ const fileSlice = createSlice({
     setPopupDisplay: (state, action) => {
       state.popupDisplay = action.payload;
     },
+    setCurrentDir: (state, action) => {
+      state.currentDir = action.payload;
+    },
+    pushToStack: (state, action) => {
+      state.dirStack.push(action.payload);
+      console.log(state.dirStack);
+    },
+    popFromStack: (state) => {
+      state.dirStack.pop();
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -93,6 +104,7 @@ const fileSlice = createSlice({
   },
 });
 
-export const { setPopupDisplay } = fileSlice.actions;
+export const { setPopupDisplay, setCurrentDir, pushToStack, popFromStack } =
+  fileSlice.actions;
 
 export default fileSlice.reducer;

@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const config = require('config');
 const router = require('./routes');
+const fileupload = require('express-fileupload');
 
 const corsMiddleware = require('./middlewares/cors.middleware');
 
@@ -10,6 +11,7 @@ const PORT = config.get('serverPort');
 
 app.use(express.json());
 app.use(corsMiddleware);
+app.use(fileupload({}));
 app.use(
   express.urlencoded({
     extended: true,

@@ -5,7 +5,7 @@ import { useAppSelector } from '../../../hooks/useSelector';
 
 const FileList: FC = () => {
   const files = useAppSelector((state) => state.file.files).map((file) => (
-    <File key={file.id} file={file} />
+    <File key={file._id} file={file} />
   ));
 
   return (

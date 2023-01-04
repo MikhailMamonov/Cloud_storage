@@ -1,5 +1,5 @@
 export interface IFile {
-  id: string;
+  _id: string;
   name: string;
   type: string;
   accessLink?: string;
@@ -15,6 +15,7 @@ export interface FileState {
   files: Array<IFile>;
   currentDir: string | null;
   popupDisplay: string;
+  dirStack: Array<string | null>;
 }
 
 export interface CreateDirProps {
