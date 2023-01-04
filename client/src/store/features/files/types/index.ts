@@ -13,7 +13,13 @@ export interface IFile {
 
 export interface FileState {
   files: Array<IFile>;
-  currentDir: string;
+  currentDir: string | null;
+  popupDisplay: string;
+}
+
+export interface CreateDirProps {
+  dirId: string;
+  name: string;
 }
 
 export interface ValidationErrors {

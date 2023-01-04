@@ -1,21 +1,22 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { FileState, IFile, ValidationErrors } from './types';
+import { FileState, IFile, ValidationErrors, CreateDirProps } from './types';
 
 import axios from '../../../api';
 import { AxiosError } from 'axios';
 
 const initialState = {
   files: [],
-  currentDir: '',
+  currentDir: null,
+  popupDisplay: 'none',
 } as FileState;
 
 export const getFiles = createAsyncThunk<
   Array<IFile>,
-  string,
+  string | null,
   {
     rejectValue: ValidationErrors;
   }
->('auth/registration', async (dirId, { rejectWithValue }) => {
+>('file/getFiles', async (dirId, { rejectWithValue }) => {
   try {
     const response = await axios.get(
       `files${dirId ? '?parent=' + dirId : ''}`,
@@ -23,7 +24,6 @@ export const getFiles = createAsyncThunk<
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       }
     );
-    console.log(response.data);
     return response.data;
   } catch (err: any) {
     let error: AxiosError<ValidationErrors> = err; // cast the error for access
@@ -35,10 +35,46 @@ export const getFiles = createAsyncThunk<
   }
 });
 
+export const createDir = createAsyncThunk<
+  IFile,
+  CreateDirProps,
+  {
+    rejectValue: ValidationErrors;
+  }
+>('file/createDir', async ({ dirId, name }, { rejectWithValue }) => {
+  try {
+    console.log(dirId);
+    const response = await axios.post(
+      `files`,
+      {
+        name,
+        parent: dirId,
+        type: 'dir',
+      },
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      }
+    );
+    return response.data;
+  } catch (err: any) {
+    let error: AxiosError<ValidationErrors> = err; // cast the error for access
+    if (!error.response) {
+      throw err;
+    }
+
+    alert(err.response.data.message);
+    return rejectWithValue(error.response.data);
+  }
+});
+
 const fileSlice = createSlice({
   name: 'file',
   initialState,
-  reducers: {},
+  reducers: {
+    setPopupDisplay: (state, action) => {
+      state.popupDisplay = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getFiles.fulfilled, (state, action) => {
@@ -46,8 +82,17 @@ const fileSlice = createSlice({
       })
       .addCase(getFiles.rejected, (state, action) => {
         alert(action.error.message);
+      })
+      .addCase(createDir.fulfilled, (state, action) => {
+        state.files.push(action.payload);
+      })
+      .addCase(createDir.rejected, (state, action) => {
+        console.log(action);
+        alert(action.error.message);
       });
   },
 });
+
+export const { setPopupDisplay } = fileSlice.actions;
 
 export default fileSlice.reducer;
