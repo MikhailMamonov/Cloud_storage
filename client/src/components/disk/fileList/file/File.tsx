@@ -16,15 +16,14 @@ interface FileProps {
 const File: FC<FileProps> = ({ file }) => {
   const dispatch = useAppDispatch();
   const currentDir = useAppSelector((state) => state.file.currentDir);
-  function openDirHandler() {
-    dispatch(pushToStack(currentDir));
-    dispatch(setCurrentDir(file._id));
+  function openDirHandler(file: IFile) {
+    if (file.type === 'dir') {
+      dispatch(pushToStack(currentDir));
+      dispatch(setCurrentDir(file._id));
+    }
   }
   return (
-    <div
-      className="file"
-      onClick={file.type === 'dir' ? (e) => openDirHandler() : undefined}
-    >
+    <div className="file" onClick={(e) => openDirHandler(file)}>
       <img
         src={file.type === 'dir' ? dirLogo : fileLogo}
         alt=""

@@ -23,6 +23,11 @@ export interface CreateDirProps {
   name: string;
 }
 
+export interface UploadFileProps {
+  dirId: string | null;
+  file: File;
+}
+
 export interface ValidationErrors {
   message: string;
   errors: Array<string>;
