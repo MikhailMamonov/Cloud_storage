@@ -28,6 +28,10 @@ export interface UploadFileProps {
   file: File;
 }
 
+export interface DownloadFileProps {
+  file: IFile;
+}
+
 export interface ValidationErrors {
   message: string;
   errors: Array<string>;

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useEffect } from 'react';
+import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 
 import './disk.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/useSelector';
@@ -11,11 +11,13 @@ import FileList from './fileList/FileList';
 import Popup from './Popup';
 import { getFiles, uploadFile } from '../../store/features/files/actions';
 import { UploadFileProps } from '../../store/features/files/types';
+import Uploader from './uploader/Uploader';
 
 const Disk: FC = () => {
   const dispatch = useAppDispatch();
   const currentDir = useAppSelector((state) => state.file.currentDir);
   const [...dirStackCopy] = useAppSelector((state) => state.file.dirStack);
+  const [dragEnter, setDragEnter] = useState(false);
   useEffect(() => {
     dispatch(getFiles(currentDir));
   }, [currentDir]);
@@ -39,8 +41,38 @@ const Disk: FC = () => {
     }
   }
 
-  return (
-    <div className="disk">
+  function onDragEnterHandler(event: React.DragEvent<HTMLDivElement>) {
+    console.log('enter');
+    event.preventDefault();
+    event.stopPropagation();
+    setDragEnter(true);
+  }
+
+  function onDragLeaveHandler(event: React.DragEvent<HTMLDivElement>) {
+    console.log('leave');
+    event.preventDefault();
+    event.stopPropagation();
+    setDragEnter(false);
+  }
+
+  function onDropHandler(event: React.DragEvent<HTMLDivElement>) {
+    console.log('drop');
+    event.preventDefault();
+    event.stopPropagation();
+    const files = Array.from(event.dataTransfer.files);
+    files.forEach((file) => {
+      dispatch(uploadFile({ file, dirId: currentDir } as UploadFileProps));
+    });
+    setDragEnter(false);
+  }
+
+  return !dragEnter ? (
+    <div
+      className="disk"
+      onDragEnter={onDragEnterHandler}
+      onDragLeave={onDragLeaveHandler}
+      onDragOver={onDragEnterHandler}
+    >
       <div className="disk__btns">
         <button className="disk__back" onClick={() => onBackClick()}>
           Назад
@@ -54,6 +86,7 @@ const Disk: FC = () => {
           </label>
           <input
             onChange={(e) => onFileUpload(e)}
+            multiple
             type="file"
             id="disk__upload-input"
             className="disk__upload-input"
@@ -62,6 +95,17 @@ const Disk: FC = () => {
       </div>
       <FileList />
       <Popup />
+      <Uploader></Uploader>
+    </div>
+  ) : (
+    <div
+      onDragEnter={onDragEnterHandler}
+      onDragLeave={onDragLeaveHandler}
+      onDragOver={onDragEnterHandler}
+      onDrop={onDropHandler}
+      className="drop-area"
+    >
+      Перетащите файлы сюда
     </div>
   );
 };

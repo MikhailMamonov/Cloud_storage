@@ -1,7 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { FileState } from './types';
 
-import { createDir, getFiles, uploadFile } from './actions';
+import {
+  createDir,
+  getFiles,
+  uploadFile,
+  downloadFile,
+  deleteFile,
+} from './actions';
+import { stat } from 'fs';
 
 const initialState = {
   files: [],
@@ -47,6 +54,16 @@ const fileSlice = createSlice({
         state.files.push(action.payload);
       })
       .addCase(uploadFile.rejected, (state, action) => {
+        console.log(action);
+        alert(action.error.message);
+      })
+      .addCase(deleteFile.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.files = [
+          ...state.files.filter((file) => file._id != action.payload),
+        ];
+      })
+      .addCase(deleteFile.rejected, (state, action) => {
         console.log(action);
         alert(action.error.message);
       });
