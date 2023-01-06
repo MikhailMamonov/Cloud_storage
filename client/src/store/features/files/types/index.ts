@@ -23,6 +23,11 @@ export interface CreateDirProps {
   name: string;
 }
 
+export interface GetFilesProps {
+  dirId: string | null;
+  sort: string;
+}
+
 export interface UploadFileProps {
   dirId: string | null;
   file: File;

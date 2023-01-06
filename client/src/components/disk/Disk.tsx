@@ -18,9 +18,10 @@ const Disk: FC = () => {
   const currentDir = useAppSelector((state) => state.file.currentDir);
   const [...dirStackCopy] = useAppSelector((state) => state.file.dirStack);
   const [dragEnter, setDragEnter] = useState(false);
+  const [sort, setSort] = useState('type');
   useEffect(() => {
-    dispatch(getFiles(currentDir));
-  }, [currentDir]);
+    dispatch(getFiles({ dirId: currentDir, sort }));
+  }, [currentDir, sort]);
 
   function onShowPopup(): void {
     dispatch(setPopupDisplay('flex'));
@@ -93,6 +94,17 @@ const Disk: FC = () => {
           />
         </div>
       </div>
+      <select
+        className="disk__select"
+        value={sort}
+        onChange={(e) => {
+          setSort(e.target.value);
+        }}
+      >
+        <option value="name"> По имени</option>
+        <option value="type"> По типу</option>
+        <option value="date"> По дате</option>
+      </select>
       <FileList />
       <Popup />
       <Uploader></Uploader>

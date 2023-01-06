@@ -5,6 +5,7 @@ import {
   ValidationErrors,
   CreateDirProps,
   UploadFileProps,
+  GetFilesProps,
 } from './types';
 
 import axios from '../../../api';
@@ -19,18 +20,25 @@ import {
 
 export const getFiles = createAsyncThunk<
   Array<IFile>,
-  string | null,
+  GetFilesProps,
   {
     rejectValue: ValidationErrors;
   }
->('file/getFiles', async (dirId, thunkAPI) => {
+>('file/getFiles', async ({ dirId, sort }, thunkAPI) => {
   try {
-    const response = await axios.get(
-      `files${dirId ? '?parent=' + dirId : ''}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      }
-    );
+    let url = ``;
+    if (dirId) {
+      url = `?parent=${dirId}`;
+    }
+    if (sort) {
+      url = `?sort=${sort}`;
+    }
+    if (dirId && sort) {
+      url = `?parent=${dirId}&sort=${sort}`;
+    }
+    const response = await axios.get(`files${url}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
     return response.data;
   } catch (err: any) {
     let error: AxiosError<ValidationErrors> = err; // cast the error for access
