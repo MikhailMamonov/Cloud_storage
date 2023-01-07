@@ -16,6 +16,7 @@ export interface FileState {
   currentDir: string | null;
   popupDisplay: string;
   dirStack: Array<string | null>;
+  view: string;
 }
 
 export interface CreateDirProps {

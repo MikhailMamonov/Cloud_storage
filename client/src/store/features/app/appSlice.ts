@@ -16,7 +16,6 @@ const appSlice = createSlice({
       state.loader = false;
     },
   },
-  extraReducers: (builder) => {},
 });
 
 export const { showLoader, hideLoader } = appSlice.actions;

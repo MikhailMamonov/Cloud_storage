@@ -1,26 +1,57 @@
 @import "../../utils/colors.scss";
 
-.disk{
-    margin-top: 20px;
+.disk {
+  margin-top: 20px;
 
-    &__btns{
-        display: flex;
-    }
+  &__btns {
+    display: flex;
+  }
 
-    &__create{
-        margin-left: 10px;
-    }
+  &__create {
+    margin-left: 10px;
+  }
 
-    &__upload-input{
-      display: none;
-    }
+  &__upload-input {
+    display: none;
+  }
 
-    &__upload-label{
-      border: 2px dashed $font-color;
-      padding: 5px 10px;
-      cursor: pointer;
-      margin-left: 10px;
-    }
+  &__upload-label {
+    border: 2px dashed $font-color;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-left: 10px;
+
+  }
+  &__select {
+    margin-left: auto;
+  }
+  &__list, &__plate {
+    height: 20px;
+    width: 20px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background: no-repeat center center;
+    background-size: contain;
+    margin: 0 10px;
+  }
+  &__list {
+    background-image: url("../../assets/list.svg");
+  }
+  &__plate {
+    background-image: url("../../assets/plate.svg");
+  }
+}
+
+.drop-area {
+  width: 100%;
+  height: calc(100vh - 50px - 40px);
+  margin: 20px;
+  border: dashed $font-color 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
 }
 
 .popup {
@@ -59,53 +90,34 @@
   }
 }
 
-.drop-area{
-  width: 100%;
-  height: calc(100vh - 50px - 40px);
-  margin: 20px;
-  border: dashed $font-color 2px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 40px;
-}
-
-.loader{
+.loader {
   display: flex;
   justify-content: center;
   align-items: center;
   height: calc(100vh - 50px);
 }
 
-
-.lds-hourglass {
+.lds-dual-ring {
   display: inline-block;
-  position: relative;
   width: 80px;
   height: 80px;
 }
-.lds-hourglass:after {
+.lds-dual-ring:after {
   content: " ";
   display: block;
-  border-radius: 50%;
-  width: 0;
-  height: 0;
+  width: 64px;
+  height: 64px;
   margin: 8px;
-  box-sizing: border-box;
-  border: 32px solid $font-color;
+  border-radius: 50%;
+  border: 6px solid $font-color;
   border-color: $font-color transparent $font-color transparent;
-  animation: lds-hourglass 1.2s infinite;
+  animation: lds-dual-ring 1.2s linear infinite;
 }
-@keyframes lds-hourglass {
+@keyframes lds-dual-ring {
   0% {
-    transform: rotate(0);
-    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-  }
-  50% {
-    transform: rotate(900deg);
-    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: rotate(0deg);
   }
   100% {
-    transform: rotate(1800deg);
+    transform: rotate(360deg);
   }
 }

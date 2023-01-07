@@ -6,6 +6,7 @@ import {
   setCurrentDir,
   popFromStack,
   setPopupDisplay,
+  setFileView,
 } from '../../store/features/files/fileSlice';
 import FileList from './fileList/FileList';
 import Popup from './Popup';
@@ -101,18 +102,26 @@ const Disk: FC = () => {
             className="disk__upload-input"
           />
         </div>
+        <select
+          className="disk__select"
+          value={sort}
+          onChange={(e) => {
+            setSort(e.target.value);
+          }}
+        >
+          <option value="name"> По имени</option>
+          <option value="type"> По типу</option>
+          <option value="date"> По дате</option>
+        </select>
+        <button
+          className="disk__plate"
+          onClick={() => dispatch(setFileView('plate'))}
+        ></button>
+        <button
+          className="disk__list"
+          onClick={() => dispatch(setFileView('list'))}
+        ></button>
       </div>
-      <select
-        className="disk__select"
-        value={sort}
-        onChange={(e) => {
-          setSort(e.target.value);
-        }}
-      >
-        <option value="name"> По имени</option>
-        <option value="type"> По типу</option>
-        <option value="date"> По дате</option>
-      </select>
       <FileList />
       <Popup />
       <Uploader></Uploader>

@@ -5,17 +5,16 @@ import {
   createDir,
   getFiles,
   uploadFile,
-  downloadFile,
   deleteFile,
   searchFiles,
 } from './actions';
-import { stat } from 'fs';
 
 const initialState = {
   files: [],
   currentDir: null,
   popupDisplay: 'none',
   dirStack: [],
+  view: 'list',
 } as FileState;
 
 const fileSlice = createSlice({
@@ -34,6 +33,9 @@ const fileSlice = createSlice({
     },
     popFromStack: (state) => {
       state.dirStack.pop();
+    },
+    setFileView: (state, action) => {
+      state.view = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -73,7 +75,12 @@ const fileSlice = createSlice({
   },
 });
 
-export const { setPopupDisplay, setCurrentDir, pushToStack, popFromStack } =
-  fileSlice.actions;
+export const {
+  setPopupDisplay,
+  setCurrentDir,
+  pushToStack,
+  popFromStack,
+  setFileView,
+} = fileSlice.actions;
 
 export default fileSlice.reducer;
