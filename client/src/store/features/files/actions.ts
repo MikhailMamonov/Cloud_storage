@@ -13,10 +13,9 @@ import { AxiosError } from 'axios';
 import {
   addUploadFile,
   changeUploadFile,
-  hideUploader,
-  removeUploadFile,
   showUploader,
 } from '../uploader/uploaderSlice';
+import { hideLoader, showLoader } from '../app/appSlice';
 
 export const getFiles = createAsyncThunk<
   Array<IFile>,
@@ -26,6 +25,7 @@ export const getFiles = createAsyncThunk<
   }
 >('file/getFiles', async ({ dirId, sort }, thunkAPI) => {
   try {
+    thunkAPI.dispatch(showLoader());
     let url = ``;
     if (dirId) {
       url = `?parent=${dirId}`;
@@ -47,6 +47,8 @@ export const getFiles = createAsyncThunk<
     }
 
     return thunkAPI.rejectWithValue(error.response.data);
+  } finally {
+    thunkAPI.dispatch(hideLoader());
   }
 });
 
@@ -150,6 +152,31 @@ export const downloadFile = async (file: IFile) => {
       alert(err.message);
     });
 };
+
+export const searchFiles = createAsyncThunk<
+  IFile[],
+  string,
+  {
+    rejectValue: ValidationErrors;
+  }
+>('file/searchFiles', async (search, thunkAPI) => {
+  try {
+    const response = await axios.get(`files/search?search=${search}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+    return response.data;
+  } catch (err: any) {
+    let error: AxiosError<ValidationErrors> = err; // cast the error for access
+    if (!error.response) {
+      throw err;
+    }
+
+    alert(err.response.data.message);
+    return thunkAPI.rejectWithValue(error.response.data);
+  } finally {
+    thunkAPI.dispatch(hideLoader());
+  }
+});
 
 export const deleteFile = createAsyncThunk<
   string,

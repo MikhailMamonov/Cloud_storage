@@ -17,6 +17,7 @@ const Disk: FC = () => {
   const dispatch = useAppDispatch();
   const currentDir = useAppSelector((state) => state.file.currentDir);
   const [...dirStackCopy] = useAppSelector((state) => state.file.dirStack);
+  const loader = useAppSelector((state) => state.app.loader);
   const [dragEnter, setDragEnter] = useState(false);
   const [sort, setSort] = useState('type');
   useEffect(() => {
@@ -67,6 +68,13 @@ const Disk: FC = () => {
     setDragEnter(false);
   }
 
+  if (loader === true) {
+    return (
+      <div className="loader">
+        <div className="lds-hourglass"></div>
+      </div>
+    );
+  }
   return !dragEnter ? (
     <div
       className="disk"

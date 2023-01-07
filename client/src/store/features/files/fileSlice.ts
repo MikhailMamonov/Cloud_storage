@@ -7,6 +7,7 @@ import {
   uploadFile,
   downloadFile,
   deleteFile,
+  searchFiles,
 } from './actions';
 import { stat } from 'fs';
 
@@ -47,24 +48,26 @@ const fileSlice = createSlice({
         state.files.push(action.payload);
       })
       .addCase(createDir.rejected, (state, action) => {
-        console.log(action);
         alert(action.error.message);
       })
       .addCase(uploadFile.fulfilled, (state, action) => {
         state.files.push(action.payload);
       })
       .addCase(uploadFile.rejected, (state, action) => {
-        console.log(action);
         alert(action.error.message);
       })
       .addCase(deleteFile.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.files = [
           ...state.files.filter((file) => file._id != action.payload),
         ];
       })
       .addCase(deleteFile.rejected, (state, action) => {
-        console.log(action);
+        alert(action.error.message);
+      })
+      .addCase(searchFiles.fulfilled, (state, action) => {
+        state.files = action.payload;
+      })
+      .addCase(searchFiles.rejected, (state, action) => {
         alert(action.error.message);
       });
   },
