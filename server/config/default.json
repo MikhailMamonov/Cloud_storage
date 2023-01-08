@@ -2,5 +2,6 @@
     "serverPort": 8080,
     "secretKey": "secret-key",
     "dbUrl": "mongodb://localhost:27017",
-    "filePath": "D:\\petProjects\\cloud_storage\\server\\files"
+    "filePath": "D:\\petProjects\\cloud_storage\\server\\files",
+    "staticPath": "D:\\petProjects\\cloud_storage\\server\\static"
 }

@@ -16,6 +16,7 @@ import {
   showUploader,
 } from '../uploader/uploaderSlice';
 import { hideLoader, showLoader } from '../app/appSlice';
+import { setUser } from '../auth/authSlice';
 
 export const getFiles = createAsyncThunk<
   Array<IFile>,
@@ -78,7 +79,6 @@ export const createDir = createAsyncThunk<
       throw err;
     }
 
-    alert(err.response.data.message);
     return thunkAPI.rejectWithValue(error.response.data);
   }
 });
@@ -124,7 +124,6 @@ export const uploadFile = createAsyncThunk<
       throw err;
     }
 
-    alert(err.response.data.message);
     return thunkAPI.rejectWithValue(error.response.data);
   }
 });
@@ -171,7 +170,6 @@ export const searchFiles = createAsyncThunk<
       throw err;
     }
 
-    alert(err.response.data.message);
     return thunkAPI.rejectWithValue(error.response.data);
   } finally {
     thunkAPI.dispatch(hideLoader());
@@ -197,7 +195,53 @@ export const deleteFile = createAsyncThunk<
       throw err;
     }
 
-    alert(err.response.data.message);
+    return thunkAPI.rejectWithValue(error.response.data);
+  }
+});
+
+export const uploadAvatar = createAsyncThunk<
+  void,
+  File,
+  {
+    rejectValue: ValidationErrors;
+  }
+>('file/uploadAvatar', async (file, thunkAPI) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await axios.post(`files/avatar`, formData, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+    alert(response.data.message);
+    thunkAPI.dispatch(setUser(response.data));
+  } catch (err: any) {
+    let error: AxiosError<ValidationErrors> = err; // cast the error for access
+    if (!error.response) {
+      throw err;
+    }
+
+    return thunkAPI.rejectWithValue(error.response.data);
+  }
+});
+
+export const deleteAvatar = createAsyncThunk<
+  void,
+  void,
+  {
+    rejectValue: ValidationErrors;
+  }
+>('file/uploadAvatar', async (_: void, thunkAPI) => {
+  try {
+    const response = await axios.delete(`files/avatar`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+    thunkAPI.dispatch(setUser(response.data));
+  } catch (err: any) {
+    let error: AxiosError<ValidationErrors> = err; // cast the error for access
+    if (!error.response) {
+      throw err;
+    }
+
     return thunkAPI.rejectWithValue(error.response.data);
   }
 });

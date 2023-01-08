@@ -10,6 +10,7 @@ const app = express();
 const PORT = config.get('serverPort');
 
 app.use(express.json());
+app.use(express.static('static'));
 app.use(corsMiddleware);
 app.use(fileupload({}));
 app.use(

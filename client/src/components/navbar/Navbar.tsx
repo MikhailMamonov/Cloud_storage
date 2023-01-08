@@ -1,18 +1,24 @@
 import React, { FC, useState } from 'react';
 import './navbar.scss';
 import logo from '../../assets/navbar-logo.svg';
+import avatarLogo from '../../assets/avatar.svg';
 import { NavLink } from 'react-router-dom';
 import { logout } from '../../store/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/useSelector';
 import { getFiles, searchFiles } from '../../store/features/files/actions';
 import { GetFilesProps } from '../../store/features/files/types';
 import { showLoader } from '../../store/features/app/appSlice';
+import { API_URL } from '../../config';
 const Navbar: FC = () => {
   const { isAuth } = useAppSelector((state) => state.auth);
   const { currentDir } = useAppSelector((state) => state.file);
+  const currentUser = useAppSelector((state) => state.auth.user);
 
   const dispatch = useAppDispatch();
   const [searchName, setSearchName] = useState('');
+  const avatar = currentUser?.avatar
+    ? `${API_URL + currentUser.avatar}`
+    : avatarLogo;
   const [searchTimeOut, setSearchTimeOut] = useState<
     NodeJS.Timeout | string | number | undefined
   >(undefined);
@@ -67,6 +73,11 @@ const Navbar: FC = () => {
           <div className="navbar__login" onClick={() => dispatch(logout())}>
             Выход
           </div>
+        )}
+        {isAuth && (
+          <NavLink to="/profile">
+            <img className="navbar__avatar" src={avatar} alt="" />
+          </NavLink>
         )}
       </div>
     </div>

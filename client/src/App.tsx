@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from './hooks/useSelector';
 import { useEffect } from 'react';
 import { auth } from './store/features/auth/authSlice';
 import Disk from './components/disk/Disk';
+import Profile from './components/profile/Profile';
 
 function App() {
   const isAuth = useAppSelector((state) => state.auth.isAuth);
@@ -33,6 +34,7 @@ function App() {
           ) : (
             <Routes>
               <Route path="/" element={<Disk></Disk>}></Route>
+              <Route path="/profile" element={<Profile></Profile>}></Route>
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           )}
