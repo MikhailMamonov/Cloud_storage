@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { useAppDispatch } from '../../../hooks/useSelector';
-import { UploadedFile } from '../../../store/features/uploader/types';
-import { removeUploadFile } from '../../../store/features/uploader/uploaderSlice';
+import { useAppDispatch } from 'hooks/useSelector';
+import { UploadedFile } from 'store/types/uploader';
+import { removeUploadFile } from 'store/features/uploader/uploaderSlice';
 import './uploader.scss';
 
 interface UploadFileProps {

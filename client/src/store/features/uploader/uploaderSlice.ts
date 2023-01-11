@@ -1,6 +1,6 @@
-import { UploadedFile } from './types/index';
+import { UploadedFile } from '../../types/uploader';
 import { createSlice } from '@reduxjs/toolkit';
-import { UploaderState } from './types';
+import { UploaderState } from '../../types/uploader';
 
 const initialState = {
   isVisible: false,
@@ -35,7 +35,6 @@ const authSlice = createSlice({
       ];
     },
   },
-  extraReducers: (builder) => {},
 });
 
 export const {

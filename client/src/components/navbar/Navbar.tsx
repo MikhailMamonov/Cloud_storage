@@ -1,14 +1,14 @@
 import React, { FC, useState } from 'react';
 import './navbar.scss';
-import logo from '../../assets/navbar-logo.svg';
-import avatarLogo from '../../assets/avatar.svg';
+import logo from 'assets/navbar-logo.svg';
+import avatarLogo from 'assets/avatar.svg';
 import { NavLink } from 'react-router-dom';
-import { logout } from '../../store/features/auth/authSlice';
-import { useAppDispatch, useAppSelector } from '../../hooks/useSelector';
-import { getFiles, searchFiles } from '../../store/features/files/actions';
-import { GetFilesProps } from '../../store/features/files/types';
-import { showLoader } from '../../store/features/app/appSlice';
-import { API_URL } from '../../config';
+import { logout } from 'store/features/auth/authSlice';
+import { useAppDispatch, useAppSelector } from 'hooks/useSelector';
+import { getFiles, searchFiles } from 'store/actions/files';
+import { GetFilesProps } from 'store/types/files';
+import { showLoader } from 'store/features/app/appSlice';
+import { API_URL } from 'config';
 const Navbar: FC = () => {
   const { isAuth } = useAppSelector((state) => state.auth);
   const { currentDir } = useAppSelector((state) => state.file);

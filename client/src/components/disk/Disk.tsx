@@ -1,17 +1,17 @@
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 
 import './disk.scss';
-import { useAppDispatch, useAppSelector } from '../../hooks/useSelector';
+import { useAppDispatch, useAppSelector } from 'hooks/useSelector';
 import {
   setCurrentDir,
   popFromStack,
   setPopupDisplay,
   setFileView,
-} from '../../store/features/files/fileSlice';
+} from 'store/features/files/fileSlice';
 import FileList from './fileList/FileList';
 import Popup from './Popup';
-import { getFiles, uploadFile } from '../../store/features/files/actions';
-import { UploadFileProps } from '../../store/features/files/types';
+import { getFiles, uploadFile } from 'store/actions/files';
+import { UploadFileProps } from 'store/types/files';
 import Uploader from './uploader/Uploader';
 
 const Disk: FC = () => {
@@ -23,7 +23,7 @@ const Disk: FC = () => {
   const [sort, setSort] = useState('type');
   useEffect(() => {
     dispatch(getFiles({ dirId: currentDir, sort }));
-  }, [currentDir, sort]);
+  }, [currentDir, sort, dispatch]);
 
   function onShowPopup(): void {
     dispatch(setPopupDisplay('flex'));

@@ -1,4 +1,4 @@
-import { IFile } from '../../files/types';
+import { IFile } from './files';
 
 export interface User {
   id: string;
@@ -23,11 +23,6 @@ export interface RegistrationProps {
 export interface LoginProps {
   email: string;
   password: string;
-}
-
-export interface ValidationErrors {
-  message: string;
-  errors: Array<string>;
 }
 
 export interface RegistrationPayload {

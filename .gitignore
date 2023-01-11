@@ -106,3 +106,4 @@ dist
 
 server/files/
 server/static/
+.vscode/

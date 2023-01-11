@@ -5,17 +5,30 @@ import Registration from './components/registtration/Registration';
 import Login from './components/authorization/Login';
 import { useAppDispatch, useAppSelector } from './hooks/useSelector';
 import { useEffect } from 'react';
-import { auth } from './store/features/auth/authSlice';
+import { auth } from './store/actions/auth';
 import Disk from './components/disk/Disk';
 import Profile from './components/profile/Profile';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const isAuth = useAppSelector((state) => state.auth.isAuth);
+  const { error } = useAppSelector((state) => state.app);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(auth());
-  }, []);
+    if (error) {
+      toast.error(
+        `${error.message}
+       stack: ${error.stackTrace}`,
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+    } else {
+      dispatch(auth());
+    }
+  }, [dispatch, error]);
 
   return (
     <BrowserRouter>
@@ -39,6 +52,7 @@ function App() {
             </Routes>
           )}
         </div>
+        <ToastContainer autoClose={4000} />
       </div>
     </BrowserRouter>
   );

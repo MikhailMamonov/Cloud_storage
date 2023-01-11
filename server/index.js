@@ -6,14 +6,15 @@ const fileupload = require('express-fileupload');
 const path = require('path');
 const corsMiddleware = require('./middlewares/cors.middleware');
 const filepathMiddleware = require('./middlewares/filepath.middleware');
+const errorHandler = require('./middlewares/errorHandler.middleware');
 
 const app = express();
 const PORT = process.env.PORT || config.get('serverPort');
 
 app.use(express.json());
 app.use(express.static('static'));
+app.use(filepathMiddleware(path.resolve(__dirname, 'files')));
 app.use(corsMiddleware);
-app.use(filepathMiddleware(path.resolve(__dirname, files)));
 app.use(fileupload({}));
 app.use(
   express.urlencoded({
@@ -21,6 +22,8 @@ app.use(
   })
 );
 app.use('/api', router);
+
+app.use(errorHandler);
 
 mongoose.set('strictQuery', true);
 const start = async () => {

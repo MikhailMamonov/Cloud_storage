@@ -6,7 +6,7 @@ const Uuid = require('uuid');
 const fs = require('fs');
 
 class FileController {
-  async createDir(req, res) {
+  async createDir(req, res, next) {
     try {
       const { name, type, parent } = req.body;
       const file = new File({ name, type, parent, user: req.user.id });
@@ -23,12 +23,11 @@ class FileController {
       await file.save();
       return res.json(file);
     } catch (e) {
-      console.log(e);
-      return res.status(400).json(e);
+      next(e);
     }
   }
 
-  async getFiles(req, res) {
+  async getFiles(req, res, next) {
     try {
       const { sort } = req.query;
       let files;
@@ -60,11 +59,11 @@ class FileController {
       }
       return res.json(files);
     } catch (e) {
-      return res.status(500).json({ message: 'Can not get files' });
+      next(e);
     }
   }
 
-  async uploadFile(req, res) {
+  async uploadFile(req, res, next) {
     try {
       const file = req.files.file;
       const parent = await File.findOne({
@@ -79,15 +78,17 @@ class FileController {
 
       let path;
       if (parent) {
-        path = `${req.filePath}\\${user._id}\\${parent.path}\\${file.name}`;
+        path = `${config.get('filePath')}\\${user._id}\\${parent.path}\\${
+          file.name
+        }`;
       } else {
-        path = `${req.filePath}\\${user._id}\\${file.name}`;
+        path = `${config.get('filePath')}\\${user._id}\\${file.name}`;
       }
 
       if (fs.existsSync(path)) {
         return res.status(400).json({ message: 'File already exist' });
       }
-      file.mv(path);
+      await file.mv(path);
 
       const type = file.name.split('.').pop();
       let filePath = file.name;
@@ -108,12 +109,11 @@ class FileController {
 
       res.json(dbFile);
     } catch (e) {
-      console.log(e);
-      return res.status(500).json({ message: 'Upload error' });
+      next(e);
     }
   }
 
-  async downloadFile(req, res) {
+  async downloadFile(req, res, next) {
     try {
       const file = await File.findOne({ _id: req.query.id, user: req.user.id });
       const path = fileService.getPath(req, file);
@@ -122,13 +122,12 @@ class FileController {
       }
       console.log(path);
       res.status(500).json({ message: 'Download error' });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: 'Download errorr' });
+    } catch (e) {
+      next(e);
     }
   }
 
-  async deleteFile(req, res) {
+  async deleteFile(req, res, next) {
     try {
       const file = await File.findOne({ _id: req.query.id, user: req.user.id });
       if (!file) {
@@ -138,24 +137,22 @@ class FileController {
       await file.remove();
       return res.json({ message: 'File was deleted' });
     } catch (e) {
-      console.log(e);
-      return res.status(400).json({ message: 'Dir is not empty' });
+      next(e);
     }
   }
 
-  async searchFile(req, res) {
+  async searchFile(req, res, next) {
     try {
       const searchName = req.query.search;
       let files = await File.find({ user: req.user.id });
       files = files.filter((file) => file.name.includes(searchName));
       return res.json(files);
     } catch (error) {
-      console.log(e);
-      return res.status(400).json({ message: 'Search error' });
+      next(e);
     }
   }
 
-  async uploadAvatar(req, res) {
+  async uploadAvatar(req, res, next) {
     try {
       const file = req.files.file;
       const user = await User.findById(req.user.id);
@@ -165,13 +162,12 @@ class FileController {
       await user.save();
 
       return res.json(user);
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json({ message: 'Upload avatar error' });
+    } catch (e) {
+      next(e);
     }
   }
 
-  async deleteAvatar(req, res) {
+  async deleteAvatar(req, res, next) {
     try {
       const user = await User.findById(req.user.id);
       fs.unlinkSync(config.get('staticPath') + '\\' + user.avatar);
@@ -179,9 +175,8 @@ class FileController {
       await user.save();
 
       return res.json(user);
-    } catch (error) {
-      console.log(e);
-      return res.status(400).json({ message: 'Delete avatar error' });
+    } catch (e) {
+      next(e);
     }
   }
 }

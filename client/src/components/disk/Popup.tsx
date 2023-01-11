@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/useSelector';
-import { setPopupDisplay } from '../../store/features/files/fileSlice';
-import Input from '../../utils/input/Input';
-import { CreateDirProps } from '../../store/features/files/types';
-import { createDir } from '../../store/features/files/actions';
+import { useAppDispatch, useAppSelector } from 'hooks/useSelector';
+import { setPopupDisplay } from 'store/features/files/fileSlice';
+import Input from 'utils/input/Input';
+import { CreateDirProps } from 'store/types/files';
+import { createDir } from 'store/actions/files';
 
 const Popup: FC = () => {
   const [dirName, setDirName] = useState('');

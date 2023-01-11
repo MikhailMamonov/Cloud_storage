@@ -1,6 +1,6 @@
 import React from 'react';
-import { useAppDispatch } from '../../hooks/useSelector';
-import { deleteAvatar, uploadAvatar } from '../../store/features/files/actions';
+import { useAppDispatch } from 'hooks/useSelector';
+import { deleteAvatar, uploadAvatar } from 'store/actions/files';
 
 const Profile = () => {
   const dispatch = useAppDispatch();

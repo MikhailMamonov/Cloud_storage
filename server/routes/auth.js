@@ -18,7 +18,7 @@ router.post(
       'password must be longer than 3 and shorter than 12'
     ).isLength({ min: 3, max: 12 }),
   ],
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       const errorFormatter = (props) => {
         return `${props.msg}`;
@@ -42,13 +42,13 @@ router.post(
       await user.save();
       await fileService.createDir(req, new File({ user: user.id, name: '' }));
       return res.json({ message: 'User was created' });
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      next(e);
     }
   }
 );
 
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
@@ -76,12 +76,12 @@ router.post('/login', async (req, res) => {
         avatar: user.avatar,
       },
     });
-  } catch (error) {
-    console.log(error);
+  } catch (e) {
+    next(e);
   }
 });
 
-router.get('/auth', authMiddleware, async (req, res) => {
+router.get('/auth', authMiddleware, async (req, res, next) => {
   try {
     const user = await User.findOne({ _id: req.user.id });
     const token = jwt.sign({ id: user.id }, config.get('secretKey'), {
@@ -98,8 +98,7 @@ router.get('/auth', authMiddleware, async (req, res) => {
       },
     });
   } catch (e) {
-    console.log(e);
-    res.send({ message: 'Server error' });
+    next(e);
   }
 });
 

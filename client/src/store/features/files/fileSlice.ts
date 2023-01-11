@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { FileState } from './types';
+import { FileState } from 'store/types/files';
 
 import {
   createDir,
@@ -7,7 +7,7 @@ import {
   uploadFile,
   deleteFile,
   searchFiles,
-} from './actions';
+} from 'store/actions/files';
 
 const initialState = {
   files: [],
@@ -43,34 +43,19 @@ const fileSlice = createSlice({
       .addCase(getFiles.fulfilled, (state, action) => {
         state.files = action.payload;
       })
-      .addCase(getFiles.rejected, (state, action) => {
-        alert(action.error.message);
-      })
       .addCase(createDir.fulfilled, (state, action) => {
         state.files.push(action.payload);
       })
-      .addCase(createDir.rejected, (state, action) => {
-        alert(action.error.message);
-      })
       .addCase(uploadFile.fulfilled, (state, action) => {
         state.files.push(action.payload);
-      })
-      .addCase(uploadFile.rejected, (state, action) => {
-        alert(action.error.message);
       })
       .addCase(deleteFile.fulfilled, (state, action) => {
         state.files = [
           ...state.files.filter((file) => file._id != action.payload),
         ];
       })
-      .addCase(deleteFile.rejected, (state, action) => {
-        alert(action.error.message);
-      })
       .addCase(searchFiles.fulfilled, (state, action) => {
         state.files = action.payload;
-      })
-      .addCase(searchFiles.rejected, (state, action) => {
-        alert(action.error.message);
       });
   },
 });

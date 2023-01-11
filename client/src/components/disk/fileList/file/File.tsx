@@ -2,16 +2,13 @@ import React, { FC } from 'react';
 import './file.scss';
 import dirLogo from '../../../../assets/dir.svg';
 import fileLogo from '../../../../assets/file.svg';
-import { IFile } from '../../../../store/features/files/types';
+import { IFile } from 'store/types/files';
 import {
   setCurrentDir,
   pushToStack,
 } from '../../../../store/features/files/fileSlice';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useSelector';
-import {
-  deleteFile,
-  downloadFile,
-} from '../../../../store/features/files/actions';
+import { deleteFile, downloadFile } from 'store/actions/files';
 import sizeFormat from '../../../../utils/sizeFormat';
 
 interface FileProps {

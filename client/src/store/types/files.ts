@@ -37,8 +37,3 @@ export interface UploadFileProps {
 export interface DownloadFileProps {
   file: IFile;
 }
-
-export interface ValidationErrors {
-  message: string;
-  errors: Array<string>;
-}
